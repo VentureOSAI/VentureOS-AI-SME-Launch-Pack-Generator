@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SME Launch Pack Generator — VentureOS AI</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #0D0D0D;
+  --ink-mid: #3A3A3A;
+  --ink-light: #6B6B6B;
+  --surface: #FFFFFF;
+  --bg: #F5F3EF;
+  --accent: #C84B1F;
+  --accent-dark: #8C3213;
+  --accent-light: #FAE8E2;
+  --amber: #D4860A;
+  --border: #E2DDD6;
+  --border-strong: #C8C0B4;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* TOPBAR */
+.topbar {
+  background: var(--ink);
+  padding: 12px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.topbar-brand {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  color: #fff;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.topbar-tag {
+  font-size: 11px;
+  color: rgba(255,255,255,.45);
+  letter-spacing: .06em;
+}
+
+/* HERO */
+.hero {
+  background: var(--ink);
+  padding: 64px 32px 56px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--accent);
+}
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+.hero-eyebrow::before {
+  content: '';
+  width: 24px;
+  height: 2px;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(32px, 5.2vw, 54px);
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.08;
+  max-width: 700px;
+  margin-bottom: 20px;
+  letter-spacing: -.02em;
+}
+.hero h1 em {
+  font-style: normal;
+  color: var(--accent);
+}
+.hero p {
+  font-size: 16px;
+  color: rgba(255,255,255,.6);
+  max-width: 540px;
+  line-height: 1.75;
+}
+
+/* MAIN */
+.main {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 48px 24px 96px;
+}
+
+/* CARD */
+.card {
+  background: var(--surface);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  padding: 36px;
+  margin-bottom: 20px;
+}
+.card-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-label::before {
+  content: '';
+  width: 16px;
+  height: 2px;
+  background: var(--accent);
+}
+.card h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 8px;
+  letter-spacing: -.01em;
+}
+.card > p {
+  font-size: 14px;
+  color: var(--ink-light);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+/* FORM */
+label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  margin-bottom: 8px;
+  margin-top: 20px;
+}
+label:first-of-type { margin-top: 0; }
+.hint {
+  font-size: 12px;
+  color: var(--ink-light);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+  display: block;
+  margin-top: -4px;
+  margin-bottom: 8px;
+}
+
+textarea, select, input[type="text"] {
+  width: 100%;
+  padding: 13px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  background: var(--bg);
+  transition: border-color .18s, background .18s;
+  appearance: none;
+  line-height: 1.6;
+}
+textarea {
+  min-height: 88px;
+  resize: vertical;
+}
+textarea::placeholder, input::placeholder { color: #B0A89E; }
+textarea:focus, select:focus, input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: #fff;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* SUBMIT BTN */
+.btn-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 32px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 24px;
+  letter-spacing: .02em;
+  transition: background .18s, transform .1s;
+}
+.btn-submit:hover { background: var(--accent-dark); }
+.btn-submit:active { transform: scale(.98); }
+.btn-submit:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+
+/* LOADING */
+.loading {
+  display: none;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 24px;
+  background: var(--accent-light);
+  border-radius: 8px;
+  border-left: 3px solid var(--accent);
+  margin-top: 20px;
+  font-size: 14px;
+  color: var(--accent-dark);
+  font-weight: 500;
+}
+.loading.active { display: flex; }
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2.5px solid var(--accent-light);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .75s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ERROR */
+.error {
+  display: none;
+  padding: 16px 20px;
+  background: #FEF2F2;
+  border: 1px solid #FCA5A5;
+  border-radius: 8px;
+  color: #B91C1C;
+  font-size: 14px;
+  margin-top: 16px;
+}
+.error.active { display: block; }
+
+/* RESULT */
+.result {
+  display: none;
+  margin-top: 28px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1.5px solid var(--ink);
+}
+.result.active { display: block; }
+.result-header {
+  background: var(--ink);
+  padding: 18px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.result-header-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: .04em;
+}
+.result-header-meta {
+  font-size: 11px;
+  color: rgba(255,255,255,.4);
+}
+.result-body {
+  padding: 32px;
+  background: var(--surface);
+}
+.result-body pre {
+  white-space: pre-wrap;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--ink);
+}
+
+/* ACTIONS */
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 18px;
+  border: 1.5px solid var(--border-strong);
+  background: var(--bg);
+  border-radius: 7px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--ink-mid);
+  transition: border-color .15s, background .15s, color .15s;
+}
+.btn-secondary:hover {
+  border-color: var(--accent);
+  background: var(--accent-light);
+  color: var(--accent-dark);
+}
+
+/* FOOTER */
+.footer {
+  text-align: center;
+  padding: 40px 24px;
+  border-top: 1px solid var(--border);
+  margin-top: 8px;
+}
+.footer p { font-size: 12px; color: var(--ink-light); }
+.footer a { color: var(--accent); text-decoration: none; font-weight: 500; }
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .grid-2 { grid-template-columns: 1fr; }
+  .hero { padding: 44px 20px 40px; }
+  .card { padding: 22px; }
+  .main { padding: 28px 16px 72px; }
+  .topbar { padding: 10px 20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-brand">VentureOS AI</span>
+  <span class="topbar-tag">Free AI Tool · SME Launch Pack Generator</span>
+</div>
+
+<div class="hero">
+  <div class="hero-eyebrow">Free AI Tool · VentureOS AI</div>
+  <h1>You decided what you're selling. <em>Now get it sent.</em></h1>
+  <p>Describe your offer, your audience, and your rough value point. Get your complete Launch Pack: page copy, a defensible price, a launch sequence, and three first-customer messages — ready to use today.</p>
+</div>
+
+<div class="main">
+  <div class="card">
+    <div class="card-label">Your offer</div>
+    <h2>Tell us what you're selling and who it's for</h2>
+    <p>This is not a brainstorm — your offer is already decided. The more specific you are, the more usable the output. Treat this like a briefing to a copywriter, pricing strategist, and outreach specialist working together.</p>
+
+    <label for="offer">What exactly are you selling? Describe the product or service.</label>
+    <textarea id="offer" placeholder="e.g. A done-for-you LinkedIn content service for B2B consultants — I write and schedule 3 posts a week, fully ghostwritten in their voice, based on a monthly 30-minute call."></textarea>
+
+    <label for="audience">Who is it for? Be specific — not 'small businesses', the actual buyer.</label>
+    <textarea id="audience" placeholder="e.g. Independent B2B consultants and fractional executives who know LinkedIn matters for their pipeline but don't have time to write content themselves. Usually solo or 1-2 person operations, $150K-$400K annual revenue."></textarea>
+
+    <div class="grid-2">
+      <div>
+        <label for="valuePoint">Rough value point or current price idea</label>
+        <input type="text" id="valuePoint" placeholder="e.g. Thinking $500/month, but not sure">
+      </div>
+      <div>
+        <label for="businessType">Business type</label>
+        <select id="businessType">
+          <option value="Service business" selected>Service business</option>
+          <option value="Physical product">Physical product</option>
+          <option value="Digital product / software">Digital product / software</option>
+          <option value="Subscription / membership">Subscription / membership</option>
+          <option value="Consulting / professional service">Consulting / professional service</option>
+        </select>
+      </div>
+    </div>
+
+    <label for="differentiator">What makes this offer different from the obvious alternative?</label>
+    <span class="hint">The thing you'd say if a skeptical friend asked "why not just do it themselves / hire someone cheaper?"</span>
+    <textarea id="differentiator" placeholder="e.g. Most ghostwriters need 2-3 rounds of edits per post and don't understand B2B sales cycles. I work from a single monthly call and the content is built to move people toward a sales conversation, not just get likes."></textarea>
+
+    <label for="firstCustomers">Who are your first 1-3 realistic customers? Names or specific descriptions.</label>
+    <span class="hint">Real people or precise enough that the outreach messages feel personal, not generic</span>
+    <textarea id="firstCustomers" placeholder="e.g. 1. Sarah, a fractional CFO I know from a mastermind group, mentioned she knows she should post more. 2. A consultant named Marcus who follows me on LinkedIn and engages with my posts regularly. 3. My old colleague Priya, now an independent ops consultant, posted about wanting more visibility last month."></textarea>
+
+    <button class="btn-submit" id="launchBtn" onclick="generateLaunchPack()">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      Generate my Launch Pack
+    </button>
+  </div>
+
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <span id="loadingText">Assembling your offer page copy...</span>
+  </div>
+
+  <div class="error" id="error"></div>
+
+  <div class="result" id="result">
+    <div class="result-header">
+      <span class="result-header-title">Your Launch Pack</span>
+      <span class="result-header-meta" id="resultTime"></span>
+    </div>
+    <div class="result-body">
+      <pre id="resultText"></pre>
+      <div class="actions">
+        <button class="btn-secondary" onclick="copyResult()">📋 Copy Launch Pack</button>
+        <button class="btn-secondary" onclick="resetForm()">↩ New Launch Pack</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>Powered by <a href="https://ventureosai.com" target="_blank">VentureOS AI</a> · From idea to live business in minutes · <a href="https://ventureosai.com" target="_blank">ventureosai.com</a></p>
+</div>
+
+<script>
+const loadingMessages = [
+  "Assembling your offer page copy...",
+  "Building your pricing case from evidence...",
+  "Sequencing your launch day by day...",
+  "Drafting your first-customer outreach...",
+  "Finalising your Launch Pack..."
+];
+let msgInterval;
+
+async function generateLaunchPack() {
+  const offer          = document.getElementById('offer').value.trim();
+  const audience        = document.getElementById('audience').value.trim();
+  const valuePoint       = document.getElementById('valuePoint').value.trim() || 'not specified — recommend from evidence';
+  const businessType     = document.getElementById('businessType').value;
+  const differentiator  = document.getElementById('differentiator').value.trim();
+  const firstCustomers  = document.getElementById('firstCustomers').value.trim();
+
+  if (!offer || offer.length < 20) { showError('Please describe your offer in at least a sentence or two.'); return; }
+  if (!audience || audience.length < 15) { showError('Please describe who this offer is for — be specific.'); return; }
+  if (!differentiator || differentiator.length < 15) { showError('Please describe what makes this offer different from the obvious alternative.'); return; }
+  if (!firstCustomers || firstCustomers.length < 15) { showError('Please describe your 1-3 realistic first customers so the outreach messages feel real.'); return; }
+
+  clearError();
+  showLoading();
+  document.getElementById('launchBtn').disabled = true;
+  document.getElementById('result').classList.remove('active');
+
+  let msgIdx = 0;
+  msgInterval = setInterval(() => {
+    msgIdx = (msgIdx + 1) % loadingMessages.length;
+    document.getElementById('loadingText').textContent = loadingMessages[msgIdx];
+  }, 2200);
+
+  const prompt = `You are a launch strategist who combines direct-response copywriting, evidence-based pricing, and outbound sales sequencing. A founder has already decided on their offer. Your job is not to advise or critique — it is to produce the complete, ready-to-use Launch Pack they can publish and send today.
+
+FOUNDER'S OFFER:
+What they're selling: ${offer}
+Who it's for: ${audience}
+Business type: ${businessType}
+Rough value point: ${valuePoint}
+What makes it different: ${differentiator}
+First 1-3 realistic customers: ${firstCustomers}
+
+Produce a complete Launch Pack structured exactly as follows:
+
+**OFFER PAGE COPY**
+Write complete, ready-to-publish landing page copy: a headline, a sub-headline, 3-4 short body paragraphs that sell the outcome (not just describe the product), and a single clear call to action. This should read as finished copy a founder can paste onto a page today, not a copy framework or set of suggestions.
+
+**YOUR PRICE**
+Recommended price: [a specific number or range, in the currency most appropriate to the description given]
+Reasoning: [the evidence-based case for this price — value delivered, what the realistic alternative costs, margin logic. Be specific, not generic.]
+If they priced too low: [what signal in their offer suggests they could charge more, if applicable]
+
+**LAUNCH SEQUENCE**
+Day 1: [specific action]
+Day 2-3: [specific action]
+Day 4-5: [specific action]
+Day 6-7: [specific action — what "launched" looks like by end of week one]
+
+**FIRST-CUSTOMER OUTREACH — 3 READY-TO-SEND MESSAGES**
+For each of the (up to 3) people described, write a complete, personalised outreach message — not a template with brackets, an actual finished message referencing what was shared about them. Keep each under 120 words, conversational, no hard sell, with a clear easy next step.
+
+Message 1 (for [name/description]):
+[complete message]
+
+Message 2 (for [name/description]):
+[complete message]
+
+Message 3 (for [name/description], if provided):
+[complete message]
+
+**LAUNCH READINESS CHECK**
+A simple checklist of 4-5 items confirming this Launch Pack is ready to use, each phrased as a completed yes/no condition (e.g. "Offer page copy: ready to publish — yes"). End with one clear instruction: what to do in the next hour.
+
+Be specific to their actual offer and audience throughout. Do not produce generic startup advice — produce the finished, usable artefacts.`;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error?.message || 'API error');
+
+    const text = data.content?.find(b => b.type === 'text')?.text || '';
+    showResult(text);
+
+  } catch (err) {
+    showError('Something went wrong: ' + err.message);
+  } finally {
+    clearInterval(msgInterval);
+    hideLoading();
+    document.getElementById('launchBtn').disabled = false;
+  }
+}
+
+function showLoading() {
+  document.getElementById('loading').classList.add('active');
+  document.getElementById('loadingText').textContent = loadingMessages[0];
+}
+function hideLoading() {
+  document.getElementById('loading').classList.remove('active');
+}
+function showError(msg) {
+  const el = document.getElementById('error');
+  el.textContent = msg;
+  el.classList.add('active');
+}
+function clearError() {
+  document.getElementById('error').classList.remove('active');
+}
+function showResult(text) {
+  document.getElementById('resultText').textContent = text;
+  document.getElementById('resultTime').textContent = new Date().toLocaleTimeString();
+  document.getElementById('result').classList.add('active');
+  document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function copyResult() {
+  navigator.clipboard.writeText(document.getElementById('resultText').textContent).then(() => {
+    const btn = event.target;
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => btn.textContent = '📋 Copy Launch Pack', 2000);
+  });
+}
+function resetForm() {
+  ['offer', 'audience', 'valuePoint', 'differentiator', 'firstCustomers'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('businessType').value = 'Service business';
+  document.getElementById('result').classList.remove('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
